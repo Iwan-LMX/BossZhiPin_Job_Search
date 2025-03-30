@@ -10,12 +10,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from langchain_functions import get_text_chunks, get_vectorstore, read_resumes, should_use_langchain, generate_letter
 
-import functions
-import finding_jobs
+import Core_OpenAI
+import Core_DeepSeek
 
 # Check OpenAI version compatibility
 from packaging import version
 from dotenv import load_dotenv
+
+# If you want to use DeepSeek please set this to Core_DeepSeek
+CORE_AI = Core_OpenAI
 
 load_dotenv()
 
@@ -34,8 +37,8 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 if not should_use_langchain():
     # Create or load assistant
-    assistant_id = functions.create_assistant(
-        client)  # this function comes from "functions.py"
+    assistant_id = CORE_AI.create_assistant(
+        client)  # this function comes from "Core_xxx/functions.py"
 
 
 def create_thread(client):
@@ -134,19 +137,19 @@ def send_response_and_go_back(driver, response):
 
 def send_job_descriptions_to_chat(url, browser_type, label, assistant_id=None, vectorstore=None):
     # 开始浏览并获取工作描述
-    finding_jobs.open_browser_with_options(url, browser_type)
-    finding_jobs.log_in()
+    CORE_AI.open_browser_with_options(url, browser_type)
+    CORE_AI.log_in()
 
     job_index = 1  # 开始的索引
     while True:
         try:
             # 获取 driver 实例
-            driver = finding_jobs.get_driver()
+            driver = CORE_AI.get_driver()
 
             # 更改下拉列表选项
-            finding_jobs.select_dropdown_option(driver, label)
+            CORE_AI.select_dropdown_option(driver, label)
             # 调用 finding_jobs.py 中的函数来获取描述
-            job_description = finding_jobs.get_job_description_by_index(job_index)
+            job_description = CORE_AI.get_job_description_by_index(job_index)
             if job_description:
                 element = driver.find_element(By.CSS_SELECTOR, '.op-btn.op-btn-chat').text
                 print(element)
@@ -193,5 +196,5 @@ if __name__ == '__main__':
         vectorstore = get_vectorstore(chunks)
         send_job_descriptions_to_chat(url, browser_type, label, vectorstore=vectorstore)
     else:
-        assistant_id = functions.create_assistant(client)
+        assistant_id = CORE_AI.create_assistant(client)
         send_job_descriptions_to_chat(url, browser_type, label, assistant_id=assistant_id)
