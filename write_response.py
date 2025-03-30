@@ -12,6 +12,7 @@ from langchain_functions import get_text_chunks, get_vectorstore, read_resumes, 
 
 import Core_OpenAI
 import Core_DeepSeek
+import Core_SiliconFlow
 
 # Check OpenAI version compatibility
 from packaging import version
