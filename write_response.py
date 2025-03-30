@@ -19,7 +19,7 @@ from packaging import version
 from dotenv import load_dotenv
 
 # If you want to use DeepSeek please set this to Core_DeepSeek
-CORE_AI = Core_OpenAI
+CORE_AI = Core_SiliconFlow
 
 load_dotenv()
 
@@ -96,7 +96,7 @@ def chat(user_input, assistant_id, thread_id=None):
         assistant_message = messages.data[0].content[0].text.value
 
         # 将换行符替换为一个空格
-        formatted_message = assistant_message.replace("\n", " ").replace(" ", "").replace("真诚的，龙思卓", "")
+        formatted_message = assistant_message.replace("\n", " ").replace(" ", "").replace("真诚的，李明欣", "")
         import re
         formatted_message = re.sub(r'【.*?】', '', formatted_message)
 

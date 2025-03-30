@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-AI_API_KEY = os.getenv('SiliconFlowAI_API_KEY')
-AI_BASE_URL = os.getenv('SiliconFlowAI_BASE_URL')
+AI_API_KEY = os.getenv('OPENAI_API_KEY')
+AI_BASE_URL = os.getenv('OPENAI_BASE_URL')
 
 # Init OpenAI Client
 client = OpenAI(api_key=AI_API_KEY, base_url=AI_BASE_URL)
